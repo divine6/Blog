@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>队列</title>
+</head>
+<body></body>
+</html>
+<script>
+    const Queue = (function() {
+
+        const items = new WeakMap()
+
+        return  class Queue {
+            constructor(){
+                items.set(this,[])
+            }
+            // 入队
+            enqueue(item) {
+                let queue = items.get(this)
+                if(item instanceof Array)  items.set(this, queue.concat(item))
+                else queue.push(item)
+            }
+            dequeue(){
+                let queue = items.get(this)
+                queue.shift()
+            }
+            front () {
+                return items.get(this)[0];
+            };
+            isEmpty () {
+                return items.get(this).length === 0;
+            };
+            size () {
+                return items.get(this).length;
+            };
+            clear () {
+                items.set(this, []);
+            };
+            print () {
+                console.log(items.get(this).toString());
+            };
+        }
+    }())
+</script>

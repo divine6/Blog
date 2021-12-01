@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优先级队列</title>
+</head>
+<body></body>
+</html>
+<script>
+
+    const PriorityQueue = (function() {
+
+        const items = new WeakMap()
+
+        return  class Queue {
+            constructor() {
+                items.set(this,[])
+            }
+            // 入队
+            enqueue(item) {
+                let queue = items.get(this)
+                if(item instanceof Array)  {
+                    for(let i = 0, ci; ci = item[i]; i++) {
+                        this.enqueue(ci)
+                    }
+                } else {
+                    let flag = false;
+                    for(let i =0, ci; ci = queue[i]; i++) {
+                        if(item.priority > ci.priority)  {
+                            queue.splice(i,0,item)
+                            flag =true;
+                            break;
+                        }
+                    }
+                    !flag && queue.push(item)
+                }
+            }
+            dequeue(){
+                return items.get(this).shift()
+            }
+            front () {
+                return items.get(this)[0];
+            };
+            isEmpty () {
+                return items.get(this).length === 0;
+            };
+            size () {
+                return items.get(this).length;
+            };
+            clear () {
+                items.set(this, []);
+            };
+            print () {
+                const queue = items.get(this)
+                queue.forEach(function (item) {
+                    console.log(`${item.element} - ${item.priority}`);
+                });
+            };
+        }
+    }())
+
+let queue = new PriorityQueue();
+
+console.log(queue.isEmpty()); // true
+
+queue.enqueue([{element: 'John', priority: 2},{element: 'qian', priority: 0},{element: 'zhangsan', priority: -1}]);
+queue.enqueue([{element: 'Jack', priority: 1}, {element: 'Camila', priority: 1}]);
+queue.print(); // Jack,Camila,John
+console.log(queue.front())
+</script>

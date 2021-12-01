@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>栈</title>
+</head>
+<body></body>
+</html>
+<script>
+    const Stack = (function() {
+        const items = new WeakMap()
+        return class Stack {
+            constructor() {
+                items.set(this,[])
+            }
+            // 入栈
+            push(item) {
+                items.get(this).push(item)
+            }
+            //  出栈
+            pop() {
+             return items.get(this).pop()
+            }
+            // 查看栈顶
+            peek() {
+                return items.get(this)[items.get(this).length - 1]
+            }
+            // 是否为空
+            isEmpty() {
+                return items.get(this).length === 0
+            }
+            // 清空栈
+            clear() {
+                items.set(this,[])
+            }
+            // 调用size方法查看一下元素的数量
+            size() {
+                return items.get(this).length
+            }
+            print() { //打印栈所有元素
+                console.log(items.get(this).toString())
+            }
+            toString() {
+                return items.get(this).toString()
+            }
+        }
+    }())
+    const stack = new Stack()
+    stack.push(1)
+    stack.push(2)
+    stack.push(3)
+    console.log('stack :>> ', stack.print());
+
+    console.log('stack.peek() :>> ', stack.peek());
+    console.log('stack.isEmpty() :>> ', stack.isEmpty());
+    console.log('stack.size() :>> ', stack.size());
+    console.log('stack.pop() :>> ', stack.pop());
+    console.log('stack.pop() :>> ', stack.pop());
+    console.log('stack :>> ', stack.print());
+    console.log('stack.clear :>> ', stack.clear());
+</script>

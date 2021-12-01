@@ -1,0 +1,27 @@
+{
+  "name": "my-mini-webpack",
+  "version": "1.0.0",
+  "description": "用于学习webpack 打包原理的项目，手写webpack 源码 适用于学习。",
+  "main": "index.js",
+  "scripts": {
+    "build": "node mywebpack > dist.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/divine6/my-mini-webpack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/divine6/my-mini-webpack/issues"
+  },
+  "homepage": "https://github.com/divine6/my-mini-webpack#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-traverse": "^6.26.0",
+    "babylon": "^6.18.0",
+    "webpack": "^4.7.0",
+    "webpack-cli": "^4.7.2"
+  }
+}

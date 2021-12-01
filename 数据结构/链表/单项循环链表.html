@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单向循环列表</title>
+</head>
+<body></body>
+</html>
+<script>
+ class Node {
+    constructor(data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+class CirSingleList  {
+    constructor() {
+        this.size = 0;  // 单链表的长度
+        this.head = new Node('head');  // 表头节点
+        this.currNode = '';  // 当前节点的指向
+    }
+    // 清空单链表
+    clear() {
+        this.head.next = null;
+        this.size = 0;
+    }
+     // 获取单链表的长度
+    length() {
+        return this.size;
+    }
+
+    // 判断单链表是否为空
+      isEmpty() {
+        return this.size === 0;
+    }
+    // 在单循环链表中寻找最后一个节点
+    findLast() {
+        let currNode = this.head;
+        let count = 0;
+
+        while(count++ !== this.size){
+            currNode = currNode.next;
+        }
+
+        return currNode;
+    }
+
+    // 在单循环链表中寻找数据
+    find(item) {
+        let currNode = this.head;
+        let lastNode = this.findLast();  // 最后一个节点
+
+        while(currNode.data !== item) {
+            if(currNode === lastNode) {  // 判断当前节点是不是最后一个节点
+                currNode = null;
+                break;
+            }
+            currNode = currNode.next;
+        }
+
+        return currNode;
+    }
+    advance(n, currNode = this.head) {
+        this.currNode = currNode;
+
+        while ((n--) && this.currNode.next) {
+            this.currNode = this.currNode.next;
+        }
+
+        return this.currNode;
+    }
+
+    // 在数据为item的节点后面插入数据为element元素的节点
+
+    insert(item, element) {
+        let itemNode = this.find(item);
+        let newNode = new Node(element);
+        if(!itemNode) {  // 如果item在单循环链表中不存在
+            return;
+        }
+
+        // 插入的位置处于头结点之后，第一个节点之前
+        if(item === 'head') {
+            if(this.size === 0) {  // 当单循环链表为空时
+                this.head.next = newNode;
+                newNode.next = this.head.next;
+            } else {  // 当单循环链表不空时
+                let lastNode = this.findLast();
+                newNode.next = this.head.next;
+                this.head.next = newNode;
+                lastNode.next = newNode;
+            }
+
+            this.size++;
+            return;
+        }
+        // 处于链表中间位置时
+        newNode.next = itemNode.next;
+        itemNode.next = newNode;
+
+        this.size++;
+    }
+    remove(item) {
+        let curNode = this.find(item);  // 找到待删除节点
+        let lastNode = this.findLast();  // 找到最后一个节点
+        let preCurNode = this.head;
+
+        // 找到待删除节点的前一个节点
+        while(preCurNode.next !== curNode) {
+            preCurNode = preCurNode.next;
+        }
+
+        if (curNode == this.head.next) {  // 如果当前节点是第一个节点
+            //头结点的后一个节点
+            if (this.size == 1) {
+                //只剩最后一个节点
+                this.head.next = null;
+            } else {
+                //还有其他节点
+                this.head.next = curNode.next;
+                lastNode.next = curNode.next;
+            }
+        } else {
+            // 其他情况
+            preCurNode.next = curNode.next;
+        }
+
+        this.size--;
+    }
+    display() {
+        let result = 'head';
+        let currNode = this.head;
+        let lastNode = this.findLast();
+
+        while(currNode !== lastNode) {
+            currNode = currNode.next;
+            result += `->${currNode.data}`;
+        }
+
+        console.log(result);
+    }
+
+    //在尾部添加数据
+    append(element) {
+        let lastNode = this.findLast();
+        let newNode = new Node(element);
+
+        lastNode.next = newNode;
+        newNode.next = this.head.next;
+
+        this.size++;
+    }
+}
+
+
+let myList = new CirSingleList();
+
+function killPerson(n, m, s) {
+    for(let i=1; i<=n; i++){
+        myList.append(i);
+    }
+
+    let currNode = undefined;
+    let toKill = null;
+
+    while(myList.size > s){  // 直到剩下s个节点为止
+        toKill = myList.advance(m, currNode);  // 从currNode开始，前进m个节点
+        currNode = toKill;  // 保存要删除的节点作为下一次循环的参数
+        myList.remove(toKill.data);  // 删除第m个节点
+    }
+
+    myList.display();
+}
+
+killPerson(41, 3, 2);  // head->16->31
+// killPerson(5, 4, 1);  // head->1
+</script>

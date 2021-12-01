@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>双向链表</title>
+</head>
+<body></body>
+</html>
+<script>
+     class Node {
+        constructor(data) {
+            this.data = data;
+            this.prev = null;
+            this.next = null;
+        }
+    }
+    class DbList  {
+        constructor() {
+            this.size = 0;  // 单链表的长度
+            this.head = new Node('head');  // 表头节点
+            this.currNode = '';  // 当前节点的指向
+        }
+        // 在单循环链表中寻找数据
+        find(item) {
+            let currNode = this.head;
+            let lastNode = this.findLast();  // 最后一个节点
+
+            while(currNode.data !== item) {
+                if(currNode === lastNode) {  // 判断当前节点是不是最后一个节点
+                    currNode = null;
+                    break;
+                }
+                currNode = currNode.next;
+            }
+
+            return currNode;
+        }
+        findLast() {   // 在单向循环链表中寻找最后一个节点
+            let currNode = this.head;
+            let count = 0;
+
+            while(count++ !== this.size){
+                currNode = currNode.next;
+            }
+
+            return currNode;
+        } 
+    
+        //从当前位置向前移动 n 个节点。
+        advance(n, currNode = this.head) {
+            this.currNode = currNode;
+
+            while ((n--) && this.currNode.next) {
+                this.currNode = this.currNode.next;
+            }
+
+            return this.currNode;
+        }
+        // 在item后添加newElement
+        insert(item, newElement) {
+            let currNode = this.find(item);
+            let newNode = new Node(newElement);
+
+            if (currNode.next) {  // 插入的位置在中间
+                newNode.next = currNode.next;
+                currNode.next.prev = newNode;
+                currNode.next = newNode;
+                newNode.prev = currNode;
+            } else {  // 插入的位置在末尾
+                currNode.next = newNode;
+                newNode.prev = currNode;
+            }
+
+            this.size++;
+        }
+
+        // 从双向链表中移除item节点
+        remove(item) {
+            let currNode = this.find(item);
+            let lastNode = this.findLast();
+
+            //企图删除头结点
+            if (item == 'head') {
+                this.head.next = null;
+                this.head.prev = null;
+                this.size = 0;
+                return;
+            }
+
+            if(currNode) {  // 如果存在item节点
+                if (currNode == lastNode) {
+                    //是最后一个节点
+                    currNode.prev.next = null;
+                } else {
+                    currNode.prev.next = currNode.next;
+                    currNode.next.prev = currNode.prev;
+                }
+        
+                currNode = null;
+                this.size--;
+            }
+        }
+        display() {  // 遍历单向循环链表
+            let result = 'head';
+            let currNode = this.head;
+            let lastNode = this.findLast();
+
+            while(currNode !== lastNode) {
+                currNode = currNode.next;
+                result += `->${currNode.data}`;
+            }
+
+            console.log(result);
+        }
+
+        // 反向遍历
+        reverseDisplay() {
+            let result = '';
+            let currNode = this.findLast();
+
+            while (currNode.data !== 'head') {
+                result += `${currNode.data}->`;
+                currNode = currNode.prev;
+            }
+
+            result += `head`;
+            console.log(result);
+        }
+
+        // 在尾部添加数据
+        append(element) {
+            let lastNode = this.findLast();
+            let newNode = new Node(element);
+
+            lastNode.next = newNode;
+            newNode.prev = lastNode;
+
+            this.size++;
+        }
+    }
+
+let test = new DbList();
+
+let arr = [1, 2, 3, 4, 5, 6, 7];
+
+for(let i=0; i<arr.length; i++){
+    test.append(arr[i]);
+}
+
+test.display();  // head->1->2->3->4->5->6->7
+
+test.insert(7, 8);
+test.display();  // head->1->2->3->4->5->6->7->8
+
+test.insert(`head`, 0.5);
+test.display();  // head->0.5->1->2->3->4->5->6->7->8
+
+test.reverseDisplay();  // 8->7->6->5->4->3->2->1->0.5->head
+
+test.remove(0.5);  // head->1->2->3->4->5->6->7->8
+test.display();
+
+test.remove(8);  
+test.display();  // head->1->2->3->4->5->6->7
+</script>

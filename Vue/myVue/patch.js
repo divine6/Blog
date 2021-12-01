@@ -1,0 +1,9 @@
+所谓旧的VNode(即oldVNode)
+就是数据变化之前视图所对应的虚拟DOM节点，而新的VNode是数据变化之后将要渲染的新的视图所对应的虚拟DOM节点，所以我们要以生成的新的VNode为基准，对比旧的oldVNode，
+
+
+
+
+如果新的VNode上有的节点而旧的oldVNode上没有，那么就在旧的oldVNode上加上去；
+如果新的VNode上没有的节点而旧的oldVNode上有，那么就在旧的oldVNode上去掉；
+如果某些节点在新的VNode和旧的oldVNode上都有，那么就以新的VNode为准，更新旧的oldVNode，从而让新旧VNode相同
